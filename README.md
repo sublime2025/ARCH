@@ -1,6 +1,6 @@
-#### 
+#### 安装常用包
 
-```basic
+```sh
 pacman -S neofetch
 pacman -S curl
 pacman -S yay
@@ -8,6 +8,13 @@ pacman -S rpm
 pacman -S git
 pacman -S wget
 pacman -S firefox
+```
+
+
+
+#### 安装Yay
+
+```sh
 sudo pacman -S base-devel
 sudo pacman -S git
 sudo git clone https://aur.archlinux.org/yay.git
@@ -15,6 +22,13 @@ sudo chown -R username:users ./yay
 id username
 cd yay
 makepkg -si
+```
+
+
+
+#### 开启SSH远程
+
+```sh
 sudo pacman -S openssh
 
 # 启动服务
@@ -34,6 +48,14 @@ vim /etc/ssh/sshd_config
 sudo ufw allow ssh
 sudo ufw allow 22/tcp
 sudo systemctl restart sshd
+
+```
+
+
+
+#### 安装中文字体包
+
+```sh
 # 安装常用中文字体
 sudo pacman -S wqy-zenhei
 
@@ -48,6 +70,13 @@ sudo locale-gen
 
 # 设置中文
 echo LANG=zh_CN.UTF-8 > /etc/locale.conf
+```
+
+
+
+#### 安装中文输入法
+
+```sh
 # 安装fictx5
 sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-gtk fcitx5-qt fcitx5-configtool
 
@@ -84,6 +113,13 @@ vim  ~/.config/fontconfig/fonts.conf
     </prefer>
   </alias>
 </fontconfig>
+```
+
+
+
+#### 安装docker
+
+```sh
 pacman -S docker 
 
 # 修改仓库地址
@@ -97,4 +133,6 @@ systemctl enable docker
 
 # 测试安装
 docker run hello-world
+
 ```
+
