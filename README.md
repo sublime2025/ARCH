@@ -6,7 +6,6 @@ pacman -S curl
 pacman -S yay
 pacman -S rpm
 pacman -S git
-pacman -S wget
 pacman -S firefox
 ```
 
@@ -49,6 +48,11 @@ sudo ufw allow ssh
 sudo ufw allow 22/tcp
 sudo systemctl restart sshd
 
+# 网络管理工具
+sudo pacman -S networkmanager
+sudo systemctl start NetworkManager
+sudo systemctl enable NetworkManager
+
 ```
 
 
@@ -57,7 +61,7 @@ sudo systemctl restart sshd
 
 ```sh
 # 安装常用中文字体
-sudo pacman -S wqy-zenhei
+sudo pacman -S adobe-source-han-sans-cn-fonts
 
 # 编辑 locale.gen 文件
 sudo vim /etc/locale.gen
@@ -70,6 +74,9 @@ sudo locale-gen
 
 # 设置中文
 echo LANG=zh_CN.UTF-8 > /etc/locale.conf
+
+# 安装中文
+sudo pacman -S cinnamon-translations
 ```
 
 
@@ -81,38 +88,13 @@ echo LANG=zh_CN.UTF-8 > /etc/locale.conf
 sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-gtk fcitx5-qt fcitx5-configtool
 
 # 编辑配置文件
- vim /etc/environment
+vim /etc/environment
 GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 
-# 字体配置
-vim  ~/.config/fontconfig/fonts.conf
-<?xml version="1.0"?>
-<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig>
-  <alias>
-    <family>sans-serif</family>
-    <prefer>
-      <family>Noto Sans CJK SC</family>
-      <family>WenQuanYi Micro Hei</family>
-    </prefer>
-  </alias>
-  <alias>
-    <family>serif</family>
-    <prefer>
-      <family>Noto Serif CJK SC</family>
-      <family>WenQuanYi Zen Hei</family>
-    </prefer>
-  </alias>
-  <alias>
-    <family>monospace</family>
-    <prefer>
-      <family>Noto Sans Mono CJK SC</family>
-      <family>WenQuanYi Micro Hei Mono</family>
-    </prefer>
-  </alias>
-</fontconfig>
+# 检查输入法状态
+fcitx5-diagnose
 ```
 
 
@@ -120,19 +102,45 @@ vim  ~/.config/fontconfig/fonts.conf
 #### 安装docker
 
 ```sh
+# 安装服务
 pacman -S docker 
-
-# 修改仓库地址
-vim /etc/docker/daemon.json
-
-# 重启
-systemctl restart docker
 
 # 开机自启
 systemctl enable docker
 
-# 测试安装
-docker run hello-world
+# 设置用户
+groupadd docker
+usermod -aG docker UserName
+
+# 仓库地址
+vim /etc/docker/daemon.json
+
+{
+"registry-mirrors" :
+["https://docker.m.daocloud.io",
+"https://docker.cmliussss.net",
+"https://docker.1ms.run",
+"https://huecker.io",
+"https://dockerhub.timeweb.cloud",
+"https://docker.rainbond.cc"]
+}
+
+# 加载配置
+systemctl daemon-reload
+
+# 重新启动
+systemctl restart docker
+
+# 安装镜像
+docker pull dpanel/dpanel
+
+# 创建容器
+docker run -d --name dpanel --restart=always \
+ -p 80:80 -p 443:443 -p 8807:8080 -e APP_NAME=dpanel \
+ -v /var/run/docker.sock:/var/run/docker.sock -v dpanel:/dpanel \
+ dpanel/dpanel:latest 
+
+# 访问地址
+localhost:8807
 
 ```
-
